@@ -6,13 +6,49 @@
 
 如果你只关心分类器的原理而不关心 GUI 的实现，你只需要关注 [core/core.py](https://github.com/endereye/tcocad/blob/main/core/core.py) 即可。
 
+## 模型架构
+
+该项目使用 SIFT 算法进行特征提取，基于 BOW 技术构建特征向量，并使用 SVM 作为分类器。
+所有训练和测试用的图片均以灰度图的形式读取，并会被缩放为 $ S \times S $ 大小。
+
+### 训练流程
+
+1. 训练图片使用 SIFT 算法提取不超过 $ F $ 个特征；
+2. 对所有图片的特征进行 KMeans 聚类，划分出 $ K $ 个簇心；
+3. 根据每张图片的特征，结合第 2 步得到的簇心，为每张图片构建一个 $ K $ 维特征向量（此特征向量不同于 SIFT 算法提取的特征）；
+4. 以每张图片的特征向量作为输入，训练 SVM；
+5. 保存模型时，只需要保存第 2 步得到的簇心以及第 4 步得到的 SVM。
+
+### 预测流程
+
+1. 预测图片使用 SIFT 算法提取不超过 $ F $ 个特征；
+2. 根据这些特征，结合模型中保存的簇心，构建一个 $ K $ 维特征向量；
+3. 以特征向量作为输入，通过模型中保存 SVM 计算得到分类结果。
+
+### 超参设置
+
+- $ F $：SIFT 算法提取到的特征数量的最大值，默认为 256；
+- $ S $：图像缩放之后的大小，默认为 256；
+- $ K $：聚类的数量，亦为特征向量的维度，默认为 32。
+
+在 [core/core.py](https://github.com/endereye/tcocad/blob/main/core/core.py) 的开头处可修改上述超参。
+**但请注意：修改过后，之前训练的模型将无法再被使用。**
+其余超参，均使用对应框架（`OpenCV`、`sklearn`）的默认值。
+
+### 相关资料：
+
+ - [SIFT](https://zhuanlan.zhihu.com/p/261965433)
+ - [KMeans](https://zhuanlan.zhihu.com/p/78798251)
+ - [BOW](https://www.jianshu.com/p/7aceda6a0487)
+ - [SVM](https://zhuanlan.zhihu.com/p/77750026)
+
 ## 数据来源、预处理及训练结果
 
 所有训练和测试用的数据均来自 [Oxford-IIIT](https://www.robots.ox.ac.uk/~vgg/data/pets/) 数据集。
 该数据集包含了超过 7000 张不同品种的猫狗照片，但该项目仅使用了其中的 3686 张照片的头部区域。
 训练数据集与测试数据集按 4 比 1 的比例随机分隔，并保证训练数据集中猫狗照片的数量相等。
 分隔时所使用的随机种子可能会对模型的性能造成细微影响。
-具体预处理过程请参见 [data/preprocess.py](https://github.com/endereye/tcocad/blob/main/data/preprocess.py)。
+具体预处理过程请参见 [data/preprocess.py](https://github.com/endereye/tcocad/blob/main/data/preprocess.py)。 
 
 下表为模型在训练数据集上的准确率：
 
