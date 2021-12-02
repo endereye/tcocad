@@ -1,0 +1,6 @@
+.idea
+*.pyc
+*.pyo
+venv
+data/train
+data/test

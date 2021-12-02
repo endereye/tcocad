@@ -1,0 +1,12 @@
+joblib==1.1.0
+numpy==1.21.3
+opencv-contrib-python-headless==4.5.4.60
+Pillow==8.4.0
+PyQt5==5.15.6
+PyQt5-Qt5==5.15.2
+PyQt5-sip==12.9.0
+scikit-learn==1.0.1
+scipy==1.7.3
+sklearn==0.0
+threadpoolctl==3.0.0
+tqdm==4.62.3
