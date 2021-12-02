@@ -76,7 +76,7 @@ pip install -r requirements.txt
 python main.py
 ```
 
-使用过程也可参见[介绍视频](https://raw.githubusercontent.com/endereye/tcocad/main/docs/train/mix.mp4)。
+使用过程也可参见[介绍视频](https://raw.githubusercontent.com/endereye/tcocad/main/docs/mix.mp4)。
 
 ### 训练
 
